@@ -1,0 +1,47 @@
+html {
+    box-sizing: border-box;
+    font-family: arial;
+}
+
+html, body, pine {
+	height: 100%;
+}
+
+*, *:before, *:after {
+  	box-sizing: inherit;
+  	margin: 0px;
+	padding: 0px;
+	background-position: center center;
+	background-size: contain;
+	background-repeat: no-repeat;
+	font-family: 'Oswald', sans-serif;
+}
+
+img {
+	outline : none;
+}
+
+a, a:hover, a:visited {
+    color: #DAB875;
+}
+
+
+
+
+body {
+    background-color: #222;
+    color: #999;
+}
+
+
+
+bgimg {
+	display: block;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	pointer-events: none;
+	z-index: -1;
+}

@@ -1,0 +1,194 @@
+
+<script type="text/javascript">
+	
+
+PINE("suggestions", function(initMe) {
+	var sugg_out_att = El.attr(initMe, "suggOut");
+	var sugg_out = window[sugg_out_att];
+	// sugg_out = [];
+
+	var potential_matches_att = El.attr(initMe, "suggOptions");
+	var potential_matches = window[potential_matches_att];
+
+	var target_input_att = El.attr(initMe, "suggInput");
+	var target_input = El.byId(target_input_att);
+
+	var sugg_spawner_att = El.attr(initMe, "suggSpawner");
+	var sugg_spawner = El.byId(sugg_spawner_att);
+
+	var limit_att = El.attr(initMe, "suggLimit");
+	var limit = limit_att ? parseInt(limit_att) : 10;
+
+
+	var lastStopIndex = undefined;
+
+
+	if(potential_matches == undefined) {
+		PINE.err("needle suggestions has no array to search")
+	}
+	else if(target_input == undefined) {
+		PINE.err("needle suggestions has no input")
+	}
+	else if(sugg_out == undefined) {
+		PINE.err("needle suggestions has no output")
+	}
+
+
+
+	else {
+		console.log(sugg_out);
+
+		var current_matches = potential_matches.slice();
+
+		target_input.addEventListener("keyup", function(event) {
+			var key = event.key;
+			var targetText = target_input.value;
+
+			console.log(key);
+
+			if (key == "Escape") {
+				if(sugg_spawner != undefined) {
+					sugg_spawner.style.display = "none";
+				}
+			}
+
+			else {
+				if(key == "Backspace") {
+					console.log("woo")
+					if(target_input.value == "") 
+						current_matches = potential_matches.slice();
+					
+					else 
+						current_matches = searchPotentials(targetText);
+				}
+				else {
+					filterCurrents(targetText);
+				}
+
+
+				console.log(current_matches);
+				updateSuggestions(targetText);
+
+				if(sugg_spawner != undefined) {
+					if(sugg_out.length < 1) 
+						sugg_spawner.style.display = "none";
+
+					else {
+						sugg_spawner.style.display = "inherit";					
+						sugg_spawner.FNS.update();
+					}
+				}
+			}
+			
+		});
+
+
+
+		if(sugg_spawner != undefined) {
+			target_input.addEventListener("focus", function(event) {
+				sugg_spawner.style.display = "inherit";			
+			});
+
+			target_input.addEventListener("click", function(event) {
+				sugg_spawner.style.display = "inherit";			
+			});
+
+			target_input.addEventListener("blur", function(event) {
+				sugg_spawner.style.display = "none";
+			});
+		}
+
+
+
+		var searchPotentials = function(targetText) {
+			var out = [];
+
+			for(var i in potential_matches) {
+				var checkMe = potential_matches[i];
+				if(checkMe.indexOf(targetText) != -1)
+					out.push(checkMe);
+			}
+			return out;
+		}
+
+
+
+		var filterCurrents = function(filter) {
+			for(var i = 0; i < current_matches.length; i++) {
+				if(current_matches[i].indexOf(filter) == -1) {
+					console.log("removing "+i+current_matches[i]);
+					current_matches.splice(i, 1);
+					i = i-1;
+				}
+			}
+		}
+
+
+		var updateSuggestions = function(targetText) {
+			sugg_out.length = 0;
+
+			for(var i in current_matches) 
+				sugg_out.push(convertTextToSuggestion(current_matches[i], targetText));
+		}
+		
+
+		var convertTextToSuggestion = function(convertMe, targetText) {
+			var targetIndex = convertMe.indexOf(targetText);
+
+			if(targetIndex != -1 && targetText != "") {
+				var match = {};
+				match.text = convertMe;
+				match.parts = [];
+
+				var matching_text = {};
+				matching_text.text = targetText;
+				matching_text.isTarget = true;
+
+				var lastIndex = 0;
+
+				while(targetIndex != -1) {
+					if(targetIndex != lastIndex) {
+						var part = {};
+						part.text = convertMe.substring(lastIndex, targetIndex);
+						part.isTarget = false;
+						match.parts.push(part);
+						lastIndex = targetIndex;
+					}
+
+					match.parts.push(matching_text);
+					lastIndex += targetText.length;
+					
+					targetIndex = convertMe.indexOf(targetText, lastIndex);
+				}
+
+				if(lastIndex < convertMe.length) {
+					var part = {};
+					part.text = convertMe.substring(lastIndex);
+					part.isTarget = false;
+					match.parts.push(part);
+				}
+
+				return match;
+			}
+
+			else {
+				var match = {};
+				match.text = convertMe;
+				match.parts = [];
+
+				var part = {};
+				part.text = convertMe;
+				part.isTarget = false;
+
+				match.parts.push(part);
+
+				return match;
+			}
+
+		}
+
+	}
+	
+});
+
+</script>

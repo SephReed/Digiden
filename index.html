@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <link href='public/css/digiden.css' rel='stylesheet' type='text/css'>
+
+    <script src="http://sephreed.github.io/PINE/PINE_Core_4.2.js"></script>
+	<script src="http://sephreed.github.io/PINE/PINE_Var.js"></script>
+	<script src="http://sephreed.github.io/PINE/PINE_Needles.js"></script>
+    <!-- <script src="http://sephreed.github.io/PINE/PINE_Includes.js"></script> -->
+    <!-- <needle src="http://sephreed.github.io/PINE/needles/overlay.html"></needle> -->
+    <!-- <needle src="http://sephreed.github.io/PINE/needles/bgimg.html"></needle> -->
+    <script src="http://sephreed.github.io/PINE/needles/onreturn.js"></script>
+    <needle src="public/needles/suggestions.html"></needle>
+
+    <style>
+
+    </style>
+
+    <script type="text/javascript">
+    // 	var response = {
+    // 		{
+    // 			type: "names",
+    // 			claims: [
+    // 				{ type: "first_name", value: "Seph"},
+    // 				{ type: "last_name", value: "Reed"},
+    // 				{ type: "nick_name", value: "SephPi"},
+    // 			]
+    // 		},
+    // 		{
+    // 			type: "network",
+    // 			claims: [
+    // 				{ type: "girlfriend", value: "Misty", args:"super_primary"},
+    // 				{ type: "employer", value: "Tinkering School"},
+    // 				{ type: "employer", value: "ThaiFresh", args:"inactive"},
+    // 			]
+    // 		},
+    // 		{
+    // 			type: "contact",
+    // 			claims: [
+    // 				{ type: "email", value: "Misty", args:"super_primary"},
+    // 				{ type: "phone_daytime", value: "Tinkering School"},
+    // 				{ type: "phone_nightime", value: "ThaiFresh", args:"inactive"},
+    // 			]
+    // 		},
+    // 		{
+    // 			type: "personal",
+    // 			claims: [
+    // 				{ type: "acomplishments", value: "Misty", args:"super_primary"},
+    // 				{ type: "acomplishments", value: "Misty", args:"super_primary"},
+    // 				{ type: "acomplishments", value: "Misty", args:"super_primary"},
+    // 				{ type: "acomplishments", value: "Misty", args:"super_primary"},
+    // 				{ type: "url", value: "Tinkering School"},
+    // 			]
+    // 		},
+
+    // 	}
+
+
+
+
+
+
+    var search_history = [
+        "test",
+        "woo yeah",
+        "woopty woopty woo"
+    ]
+  
+
+    function search() {
+    	El.byId("main_body").className += " results_mode";
+    }
+
+    function show_settings() {
+    	var dropdown =  El.byId("settings_dropdown");
+    	dropdown.className = "displayed";
+
+    	if(allow_stor == null) {
+    		El.byId("data_warning").className += " choice_made";
+    	}
+
+    	var mouseupFunc = function(event) {
+			if(dropdown == event.target || dropdown.contains(event.target)) return;	
+			dropdown.className = "";
+			this.removeEventListener('mouseup', mouseupFunc, false);
+		}
+
+		document.addEventListener('mouseup', mouseupFunc);
+    }
+
+
+    var allow_stor;
+    function allow_local_data(yesNo) {
+    	allow_stor = yesNo+'';
+    	localStorage.setItem("allow_local_data", allow_stor);
+    	El.byId("data_warning").className += " choice_made";
+    }
+    
+    PINE.ready(function() {
+    	allow_stor = localStorage.getItem("allow_local_data");
+    	if(allow_stor == "true" || allow_stor == "false") {
+    		El.byId("data_warning").style.display = "none";
+    	}
+    });
+
+
+
+
+    var suggestion_list = [
+        {
+            parts : [ 
+                {text: "hey", isTarget: true}, 
+                {text: " ho ", isTarget: false}, 
+                {text: "hey", isTarget: true}, 
+                {text: " yo", isTarget: false}
+            ]
+        }
+    ];
+
+
+
+    var count = [1, 2, 3];
+
+
+
+
+
+
+    </script>
+
+   
+</head>
+
+
+
+
+
+<body id="main_body">
+<pine>
+<bgimg style="background: url('public/images/matte.png'); opacity: 0.3;"></bgimg>
+
+<div id="settings" onclick="show_settings()"></div>
+<div id="settings_dropdown">
+Allow Query Caching<switch></switch><br>
+Allow Results Caching<switch></switch><br>
+<a href="about.html#privacy">Privacy Statement</a><br>
+<a href="about.html#digiden">About Digiden</a><br>
+</div>
+
+
+<div id="top_pad"></div>
+
+<div id="searcharea">
+	<div id="title"><a href="about.html">Digiden</a></div>
+	<div id="search_bar">
+		<input id="search_box" type="text" onreturn="search"></input>
+		<div id="search_button" onclick="search()" ></div>
+        <suggestions 
+            suggInput="search_box" 
+            suggOptions="search_history" 
+            suggOut="suggestion_list" 
+            suggLimit="10" 
+            suggSpawner="suggestion_dropdown">
+            </suggestions>
+        <div id="suggestion_dropdown" spawner="suggestion_list" style="display: none">
+            <div spawn spawner="suggestion_list[i].parts" indexer="j">
+                <span class="highlight_{{suggestion_list[i].parts[j].isTarget}}" spawn>{{suggestion_list[i].parts[j].text}}</span>
+            </div>
+        </div>
+	</div>
+    
+</div>
+
+<div id="fade_top"></div>
+
+<div id="content">
+	
+	<div id="results">
+		<div><span>Wooooo</span>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+		</div>
+
+		<div><span>Wooooo</span>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+		</div>
+
+		<div><span>Wooooo</span>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+		</div>
+
+		<div><span>Wooooo</span>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+		</div>
+
+		<div><span>Wooooo</span>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+		</div>
+
+		<div><span>Wooooo</span>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+			-tenahnedhstoenadshotenadshotenahdsoeta<br>
+		</div>
+
+
+	</div>
+</div>
+
+<div id="data_warning">
+	Digiden can store your queries locally for use as suggestions.  Would you like this enabled?
+	<button id="data_allow" onclick="allow_local_data(true)">Yes Please</button>
+	<button id="data_no" onclick="allow_local_data(false)">No Thank You</button>
+</div>
+
+
+</pine>
+</body>
+
+
+
+
+
+
+ <style>
+
+        #suggestion_dropdown {
+            /*overflow: hidden;*/
+            /*box-sizing: border-box;*/
+            /*height: 0px;*/
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            background: rgba(120,120,120,0.3);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            /*box-shadow: 1px 1px 10px rgba(0,0,0,0.3);*/
+            box-shadow: 1px 1px 10px rgba(250,250,250,0.1);
+            border: 1px solid rgba(0,0,0,0.3);
+        }
+
+        .highlight_true {
+            color: #EEE;
+        }
+
+
+        #settings {
+            display: block;
+            cursor: pointer;
+            position: absolute;
+            right: 0px;
+            top: 2px;
+            height: 50px;
+            width: 50px;
+            z-index: 15;
+            background-image: url("public/images/gear_icon.png");
+            background-size: 60% auto;
+            opacity: 0.8;
+        }
+
+        #settings:hover {
+            transform: rotate(5deg);
+        }
+
+        #settings_dropdown {
+            background: #444;
+            color: #FAFAFA;
+            position: absolute;
+            right: 25px;
+            top: 25px;
+            z-index: 20;
+            padding: 10px;
+            opacity: 0;
+            border-radius: 8px;
+            border-top-right-radius: 2px;
+            border: 1px solid rgba(0,0,0,0.2);
+            box-shadow: 1px 1px 10px rgba(0,0,0,0.3);
+            pointer-events: none;
+            transition: opacity ease 0.25s;
+        }
+
+        #settings_dropdown.displayed {
+            pointer-events: initial;
+            opacity: 1;
+        }
+
+
+        #top_pad {
+            height: 28%;
+            transition: 0.25s ease all;
+            transition-delay: 0.25s;
+        }
+        .results_mode #top_pad {
+            /*height: 0px;*/
+            /*animation-name: shrink;*/
+            /*animation-duration: 0.25s;*/
+            /*animation-delay: 0.25s;*/
+            /*animation-fill-mode: forwards;*/
+            /*animation-iteration-count: 1;*/
+            height: 0px;
+        }
+
+       /* @keyframes shrink {
+            0%{}
+            100%{
+                height: 0px;
+            }
+        }*/
+
+
+
+        #searcharea {
+            position: fixed;
+            z-index: 10;
+            /*top: 30%;*/
+            /*transform: translateY(-50%);*/
+            width: 100%;
+            /*text-align: center;*/
+            transition: background ease 0.25s;
+            transition-delay: 0.5s;
+        }
+
+        .results_mode #searcharea{
+            background: #9c003c;
+        }
+
+        
+        #content {
+            display: block;
+            position: absolute;
+            top: 100%;
+            bottom: 0px;
+            width: 100%;
+            overflow: scroll;
+            transition: top ease 0.25s;
+            transition-delay: 0.25s;
+        }
+
+        .results_mode #content {
+            /*animation-name: displayed;
+            animation-duration: 0.25s;
+            animation-delay: 0.25s;
+            animation-fill-mode: forwards;*/
+            
+            top: 63px;
+            
+        }
+        /*@keyframes displayed {
+            0%{}
+            100%{
+                top: 63px;
+            }
+        }*/
+
+        .results_mode #fade_top {
+            opacity: 1.0;
+        }
+
+
+
+
+        
+
+        /*#title.topbar {
+            position: absolute;
+            left: 0px;
+        }*/
+
+        #searcharea input {
+            /*position: relative;*/
+            padding: 5px 50px 5px 12px;
+            font-size: 25px;
+            border: none;
+            /*border: 1px solid rgba(0,0,0,0.2);*/
+            border-radius: 2px;
+            width: 100%;
+        }
+
+        .results_mode #searcharea input {
+            /*border-bottom-left-radius: 0px; */
+            /*border-bottom-right-radius: 0px;*/
+        }
+
+        #search_bar {
+            position: absolute;
+            /*display: inline-block;*/
+            /*width: 60%;*/
+            /*width: 100%;*/
+            top: 100px;
+            left: 20%;
+            right: 20%;
+            /*margin: 0px 20% 0px 20%;*/
+            /*min-width: 400px;*/
+            transition: all ease 0.25s;
+            transition-delay: 0.125s;
+        }
+
+        .results_mode #search_bar {
+            top: 7px;
+            left: 175px;
+            right: 8%;
+            /*animation: slide_up 1s 1;*/
+            /*animation-name: slide_up;*/
+            /*animation-duration: 0.25s;*/
+            /*animation-delay: 0.125s;*/
+            /*animation-fill-mode: forwards;*/
+            /*animation-iteration-count: 1;*/
+        }
+
+      /*  @keyframes slide_up {
+          0% {
+            
+          }
+          100% {
+            top: 7px;
+            left: 175px;
+            right: 8%;
+          }
+        }*/
+
+        #search_button {
+            position: absolute;
+            right: 5px;
+            top: 0px;
+            height: 50px;
+            width: 50px;
+            background-image: url("public/images/search_icon.png");
+            background-position: right;
+            background-size: auto 80%;
+            opacity: 0.75;
+            cursor: pointer;
+        }
+
+        #search_button:hover {
+            opacity: 1.0;
+        }
+
+        #title {
+            position: relative;
+            display: inline-block;
+            font-size: 50px;
+            /*text-shadow: 1px 1px rgba(0,0,0,0.2), -1px -1px rgba(250,250,250,0.8);*/
+            text-shadow: 1px 1px rgba(0,0,0,0.2), -1px -1px rgba(234, 207, 57, 0.2);
+            
+            margin-bottom: 35px;
+            transition: all ease-out 0.125s;
+            /*width: 100%;*/
+            left: 50%;
+            transform: translateX(-50%);
+            /*color: #9c003c;*/
+            /*color: #777;*/
+        }
+
+        #title a {
+            color: inherit;
+            text-decoration: none;
+            cursor: help;
+        }
+
+
+        .results_mode #title {
+            margin-bottom: 0px;
+            /*text-align: left;*/
+            left: 80px;
+            color: #EEE;
+            font-size: 40px;
+        }
+
+        
+
+        #results {
+            display: none;
+            /*margin: 30px 8% 50px 8%;*/
+            margin: 30px 175px 50px 8%;
+        }
+
+        .results_mode #results {
+            display: block;
+        }
+
+        #results span {
+            color: #F0F;
+        }
+
+        #results > div {
+            padding: 10px;
+            margin-bottom: 10px;
+            /*background-color: rgba(250,250,250,0.1);*/
+            background-color: #333;
+            border-radius: 4px;
+            /*background: url('public/images/matte.png');*/
+        }
+
+        
+
+        #fade_top {
+            opacity: 0;
+            position: absolute;
+            pointer-events: none;
+            z-index: 5;
+            top: 41px;
+            height: 45px;
+            width: 100%;
+            background: linear-gradient(transparent, #222 20px, #222 30px, transparent);
+            transition: all ease 2.0s;
+        }
+
+        #data_warning {
+            position: fixed;
+            text-align: center;
+            top: 0px;
+            left: 0px;
+            padding: 10px;
+            padding-right: 40px;
+            width: 100%;
+            background: #9c003c;
+            /*background: #9c0027;*/
+            color: #FAFAFA;
+            transition: opacity ease 0.25s;
+        }
+
+        .results_mode #data_warning {
+            opacity: 0;
+        }
+
+        #data_warning.choice_made {
+            animation-name: squeeze_to_settings;
+            animation-duration: .75s;
+            animation-fill-mode: forwards;
+            /*animation-iteration-count: 1;*/
+        }
+
+        @keyframes squeeze_to_settings {
+            0%{}
+            25% {
+                left: calc(100% - 50px);
+                opacity: 1;
+                border-radius: 10px;
+            }
+            100%{
+                left: calc(100% - 50px);
+                opacity: 0;
+                border-radius: 10px;
+            }
+        }
+
+        switch {
+            display: inline-block;
+            height: 17px;
+            width: 40px;
+            background-image: url("public/images/on_off0.png");
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        switch:active {
+            background-image: url("public/images/on_off1.png");
+        }
+
+        button {
+            cursor: pointer;
+            padding: 4px;
+            background: #FAFAFA;
+            border: 1px solid rgba(0,0,0,0.3);
+            box-shadow: 1px 1px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            color: #333;
+            font-size: 13px;
+        }
+
+        button:hover {
+            background: #BBB;
+        }
+
+        #data_allow:hover {
+            background: #7eff76;
+        }
+
+        #data_no:hover {
+            background: #ffa631;
+        }
+
+        @media all and (max-width: 800px) {
+            #results {
+                margin: 30px 8% 50px 8%;
+            }
+
+            #search_bar {
+                left: 8%;
+                right: 8%;
+            }
+        }
+
+        @media all and (max-width: 400px) {
+            #title {
+                font-size: 35px;
+            }
+
+            .results_mode #title {
+                left: 4%;
+            }
+
+            .results_mode #search_bar {
+                top: 7px;
+                left: 50px;
+                right: 50px;
+            }
+
+            #results {
+                margin: 30px 4% 50px 4%;
+            }
+
+            #search_bar {
+                left: 4%;
+                right: 4%;
+            }
+        }
+    </style>
+
+
+
+
+
+
+</html>
+
+
+
+
