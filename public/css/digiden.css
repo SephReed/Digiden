@@ -25,12 +25,24 @@ a, a:hover, a:visited {
     color: #DAB875;
 }
 
+.light_mode a, .light_mode a:hover, .light_mode a:visited {
+    color: #CF8900;
+}
+
 
 
 
 body {
     background-color: #222;
+    /*background: linear-gradient(#14201E, #222);*/
     color: #999;
+}
+
+
+body.light_mode {
+	/*background-color: #E1FFF6;*/
+	background: #FFF;
+	color: #333;
 }
 
 
@@ -44,4 +56,13 @@ bgimg {
 	left: 0px;
 	pointer-events: none;
 	z-index: -1;
+	opacity: 0.3;
+	background: url('../images/matte.png');
 }
+
+
+.light_mode bgimg {
+	display: none;
+}
+
+

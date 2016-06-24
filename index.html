@@ -14,7 +14,10 @@
     <!-- <needle src="http://sephreed.github.io/PINE/needles/overlay.html"></needle> -->
     <!-- <needle src="http://sephreed.github.io/PINE/needles/bgimg.html"></needle> -->
     <script src="http://sephreed.github.io/PINE/needles/onreturn.js"></script>
+    <needle src="public/needles/selectableList.html"></needle>
     <needle src="public/needles/suggestions.html"></needle>
+    
+    <needle src="public/needles/switch.html"></needle>
 
     <style>
 
@@ -64,22 +67,39 @@
 
 
 
-    var search_history = [
-        "test",
-        "woo yeah",
-        "woopty woopty woo"
-    ]
+    // var query_cache = [
+    //     "test",
+    //     "woo yeah",
+    //     "woopty woopty woo"
+    // ]
+
+
+
+    var query_cache = [];
+    var local_query_cache = localStorage.getItem("query_cache");
+    if(local_query_cache != null) {
+        console.log(local_query_cache);
+        query_cache = JSON.parse(local_query_cache);
+    }
   
 
     function search() {
     	El.byId("main_body").className += " results_mode";
+
+        if(ALLOW_QUERY_STORAGE) {
+            var query = El.byId("search_box").value;
+            if(query_cache.indexOf(query) == -1) {
+                query_cache.push(query);
+                localStorage.setItem("query_cache", JSON.stringify(query_cache));
+            }
+        }
     }
 
     function show_settings() {
     	var dropdown =  El.byId("settings_dropdown");
     	dropdown.className = "displayed";
 
-    	if(allow_stor == null) {
+    	if(ALLOW_QUERY_STORAGE == null) {
     		El.byId("data_warning").className += " choice_made";
     	}
 
@@ -93,16 +113,29 @@
     }
 
 
-    var allow_stor;
+
+
+    
+
+    var tmp_ALLOW_QUERY_STORAGE = localStorage.getItem("allow_local_data")
+    var ALLOW_QUERY_STORAGE;
+    if(tmp_ALLOW_QUERY_STORAGE == "true")  ALLOW_QUERY_STORAGE = true;
+    else if(tmp_ALLOW_QUERY_STORAGE == "false")  ALLOW_QUERY_STORAGE = false;
+    
+    console.log(localStorage.getItem("allow_local_data"), ALLOW_QUERY_STORAGE);
+
+
+
     function allow_local_data(yesNo) {
-    	allow_stor = yesNo+'';
-    	localStorage.setItem("allow_local_data", allow_stor);
-    	El.byId("data_warning").className += " choice_made";
+
+    	ALLOW_QUERY_STORAGE = yesNo;
+        console.log(ALLOW_QUERY_STORAGE)
+    	localStorage.setItem("allow_local_data", ALLOW_QUERY_STORAGE);
+    	El.byId("data_warning").classList.add("choice_made");
     }
     
     PINE.ready(function() {
-    	allow_stor = localStorage.getItem("allow_local_data");
-    	if(allow_stor == "true" || allow_stor == "false") {
+    	if(ALLOW_QUERY_STORAGE === true || ALLOW_QUERY_STORAGE === false) {
     		El.byId("data_warning").style.display = "none";
     	}
     });
@@ -110,20 +143,41 @@
 
 
 
-    var suggestion_list = [
-        {
-            parts : [ 
-                {text: "hey", isTarget: true}, 
-                {text: " ho ", isTarget: false}, 
-                {text: "hey", isTarget: true}, 
-                {text: " yo", isTarget: false}
-            ]
+    // var suggestion_list = [
+    //     {
+    //         parts : [ 
+    //             {text: "hey", isTarget: true}, 
+    //             {text: " ho ", isTarget: false}, 
+    //             {text: "hey", isTarget: true}, 
+    //             {text: " yo", isTarget: false}
+    //         ]
+    //     }
+    // ];
+
+    var suggestion_list = [];
+
+
+    var LIGHT_MODE_ENABLED;
+
+    function setLightMode(onOff) {
+        if(onOff !== LIGHT_MODE_ENABLED) {
+            LIGHT_MODE_ENABLED = onOff;
+            localStorage.setItem("LIGHT_MODE", LIGHT_MODE_ENABLED);
+
+            if(LIGHT_MODE_ENABLED)
+                document.body.classList.add("light_mode");
+
+            else 
+                document.body.classList.remove("light_mode");            
+            
         }
-    ];
+    }
+
+    setLightMode(localStorage.getItem("LIGHT_MODE") == "true");
 
 
 
-    var count = [1, 2, 3];
+    // var count = [1, 2, 3];
 
 
 
@@ -141,14 +195,32 @@
 
 <body id="main_body">
 <pine>
-<bgimg style="background: url('public/images/matte.png'); opacity: 0.3;"></bgimg>
+<bgimg></bgimg>
 
 <div id="settings" onclick="show_settings()"></div>
+
 <div id="settings_dropdown">
-Allow Query Caching<switch></switch><br>
-Allow Results Caching<switch></switch><br>
-<a href="about.html#privacy">Privacy Statement</a><br>
-<a href="about.html#digiden">About Digiden</a><br>
+
+    Enable Query Caching
+    <switch onswitch="allow_local_data" 
+        switchInit="ALLOW_QUERY_STORAGE">
+        </switch><br>
+
+   <!--  Allow Results Caching
+    <switch onswitch="" 
+        switchInit="LIGHT_MODE_ENABLED">
+        </switch><br> -->
+
+    Enable Light Mode
+    <switch onswitch="setLightMode" 
+        switchInit="LIGHT_MODE_ENABLED">
+        </switch><br>
+
+    <a href="cache.html">View Cached Data</a><br>
+
+    <a href="about.html#privacy">Privacy Statement</a><br>
+
+    <a href="about.html#digiden">About Digiden</a><br>
 </div>
 
 
@@ -157,17 +229,26 @@ Allow Results Caching<switch></switch><br>
 <div id="searcharea">
 	<div id="title"><a href="about.html">Digiden</a></div>
 	<div id="search_bar">
-		<input id="search_box" type="text" onreturn="search"></input>
-		<div id="search_button" onclick="search()" ></div>
-        <suggestions 
-            suggInput="search_box" 
-            suggOptions="search_history" 
+		<input id="search_box" 
+            type="text" 
+            onreturn="search" 
+            suggestions="query_cache"
             suggOut="suggestion_list" 
             suggLimit="10" 
             suggSpawner="suggestion_dropdown">
-            </suggestions>
-        <div id="suggestion_dropdown" spawner="suggestion_list" style="display: none">
-            <div spawn spawner="suggestion_list[i].parts" indexer="j">
+            </input>
+		<div id="search_button" onclick="search()" ></div>
+        <div id="suggestion_dropdown" 
+            spawner="suggestion_list" 
+            style="display: none" 
+            selectableList
+            selectOn="hover"
+            onclick="search()">
+            <div spawn 
+                spawner="suggestion_list[i].parts"
+                value="{{suggestion_list[i].text}}" 
+                indexer="j"
+                selectableItem>
                 <span class="highlight_{{suggestion_list[i].parts[j].isTarget}}" spawn>{{suggestion_list[i].parts[j].text}}</span>
             </div>
         </div>
@@ -248,18 +329,44 @@ Allow Results Caching<switch></switch><br>
             /*box-sizing: border-box;*/
             /*height: 0px;*/
             width: 100%;
-            padding: 10px;
+            /*padding: 10px;*/
             font-size: 14px;
-            background: rgba(120,120,120,0.3);
+            background: rgba(80,80,80,0.975);
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
             /*box-shadow: 1px 1px 10px rgba(0,0,0,0.3);*/
             box-shadow: 1px 1px 10px rgba(250,250,250,0.1);
             border: 1px solid rgba(0,0,0,0.3);
+            overflow: scroll;
+            max-height: 200px;
+        }
+
+        .light_mode #suggestion_dropdown {
+            background: white;
+            color: #888;
         }
 
         .highlight_true {
             color: #EEE;
+        }
+
+        .light_mode .highlight_true {
+            color: #0A0A0A;
+        }
+
+        #suggestion_dropdown > div {
+            margin: 2px;
+            padding: 0px 8px;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        #suggestion_dropdown > div[selected] {
+            background: rgba(0, 250, 250, 0.2);
+        }
+
+        .light_mode #suggestion_dropdown > div[selected] {
+            background: rgba(0, 120, 120, 0.2);
         }
 
 
@@ -275,6 +382,16 @@ Allow Results Caching<switch></switch><br>
             background-image: url("public/images/gear_icon.png");
             background-size: 60% auto;
             opacity: 0.8;
+            transition: all ease 0.5s;
+        }
+
+        .light_mode #settings {
+            filter: invert(100%);
+        }
+
+        .results_mode #settings {
+            filter: none;
+            opacity: 0.95;
         }
 
         #settings:hover {
@@ -296,6 +413,11 @@ Allow Results Caching<switch></switch><br>
             box-shadow: 1px 1px 10px rgba(0,0,0,0.3);
             pointer-events: none;
             transition: opacity ease 0.25s;
+        }
+
+        .light_mode #settings_dropdown {
+            background: white;
+            color: #333;
         }
 
         #settings_dropdown.displayed {
@@ -336,7 +458,7 @@ Allow Results Caching<switch></switch><br>
             width: 100%;
             /*text-align: center;*/
             transition: background ease 0.25s;
-            transition-delay: 0.5s;
+            transition-delay: 0.35s;
         }
 
         .results_mode #searcharea{
@@ -371,9 +493,7 @@ Allow Results Caching<switch></switch><br>
             }
         }*/
 
-        .results_mode #fade_top {
-            opacity: 1.0;
-        }
+       
 
 
 
@@ -389,15 +509,24 @@ Allow Results Caching<switch></switch><br>
             /*position: relative;*/
             padding: 5px 50px 5px 12px;
             font-size: 25px;
-            border: none;
+            /*border: none;*/
+            border: 1px solid transparent;
             /*border: 1px solid rgba(0,0,0,0.2);*/
             border-radius: 2px;
             width: 100%;
         }
 
+
+
+        .light_mode #searcharea input {
+            border: 1px solid rgba(0,0,0,0.3);
+            box-shadow: 1px 3px 8px rgba(0,0,0,0.1);
+        }
+
         .results_mode #searcharea input {
             /*border-bottom-left-radius: 0px; */
             /*border-bottom-right-radius: 0px;*/
+            border: none;
         }
 
         #search_bar {
@@ -468,6 +597,45 @@ Allow Results Caching<switch></switch><br>
             transform: translateX(-50%);
             /*color: #9c003c;*/
             /*color: #777;*/
+
+        }
+
+        .light_mode #title {
+            color: #9c003c;
+        }
+
+        .results_mode #title {
+           /* margin-bottom: 0px;
+            left: 80px;
+            color: #EEE;
+            font-size: 40px;*/
+            animation-name: scoot_and_color;
+            animation-duration: 1.25s;
+            /*animation-delay: 0.125s;*/
+            animation-fill-mode: forwards;
+            animation-iteration-count: 1;
+        }
+
+        @keyframes scoot_and_color {
+            0% {
+            
+            }
+            10% {
+                margin-bottom: 0px;
+                left: 80px;
+                font-size: 40px;
+            }
+            90% {
+                margin-bottom: 0px;
+                left: 80px;
+                font-size: 40px;
+            }
+            100% {
+                margin-bottom: 0px;
+                left: 80px;
+                color: #EEE;
+                font-size: 40px;
+            }
         }
 
         #title a {
@@ -477,20 +645,14 @@ Allow Results Caching<switch></switch><br>
         }
 
 
-        .results_mode #title {
-            margin-bottom: 0px;
-            /*text-align: left;*/
-            left: 80px;
-            color: #EEE;
-            font-size: 40px;
-        }
+        
 
         
 
         #results {
             display: none;
             /*margin: 30px 8% 50px 8%;*/
-            margin: 30px 175px 50px 8%;
+            margin: 20px 175px 50px 8%;
         }
 
         .results_mode #results {
@@ -506,8 +668,18 @@ Allow Results Caching<switch></switch><br>
             margin-bottom: 10px;
             /*background-color: rgba(250,250,250,0.1);*/
             background-color: #333;
+            background-color: rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 1px 1px 5px rgba(255,255,255,0.05);
             border-radius: 4px;
             /*background: url('public/images/matte.png');*/
+        }
+
+        .light_mode #results > div {
+            /*background-color: #FAFAFA;*/
+            background-color: transparent;
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 1px 1px 5px rgba(0,0,0,0.05);
         }
 
         
@@ -522,6 +694,17 @@ Allow Results Caching<switch></switch><br>
             width: 100%;
             background: linear-gradient(transparent, #222 20px, #222 30px, transparent);
             transition: all ease 2.0s;
+        }
+
+        .results_mode #fade_top {
+            opacity: 1.0;
+        }
+
+        .results_mode.light_mode #fade_top {
+            /*display: none;*/
+            background: linear-gradient(transparent, #FFF 20px, transparent);
+            height: 35px;
+            opacity: 0.8;
         }
 
         #data_warning {
@@ -572,7 +755,7 @@ Allow Results Caching<switch></switch><br>
             cursor: pointer;
         }
 
-        switch:active {
+        switch[selected] {
             background-image: url("public/images/on_off1.png");
         }
 

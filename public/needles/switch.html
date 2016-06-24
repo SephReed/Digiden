@@ -1,0 +1,65 @@
+<script>
+PINE("switch", function(initMe) {
+
+	var onSwitch_att;
+	var onSwitch;
+
+	var getonSwitchFn = function() {
+		onSwitch_att = El.attr(initMe, "onSwitch");
+		onSwitch = onSwitch_att ? window[onSwitch_att] : undefined;
+	}
+
+	getonSwitchFn();
+
+	var switchInit_att = El.attr(initMe, "switchInit");
+	console.log(switchInit_att);
+
+	// var active = switchInit_att ? (window[switchInit_att] === true || window[switchInit_att] == "true") : false;
+	var active = switchInit_att ? window[switchInit_att] === true : false;
+
+	if(active)
+		El.attr(initMe, "selected", "");
+
+	PINE.addFunctionToNode(initMe, "set", function(onOff) {
+		if(active == onOff) return;
+
+		active = onOff;
+
+		if(active)
+			El.attr(initMe, "selected", "");
+		else
+			initMe.removeAttribute("selected");
+
+		if(onSwitch == undefined) 
+			getonSwitchFn();
+
+		if(onSwitch)
+			onSwitch(active);
+	});
+
+	PINE.addFunctionToNode(initMe, "on", function() {
+		initMe.FNS.set(true);
+	});
+
+	PINE.addFunctionToNode(initMe, "off", function() {
+		initMe.FNS.set(false);
+	});
+
+	PINE.addFunctionToNode(initMe, "switch", function() {
+		initMe.FNS.set(!active);
+	});
+
+	initMe.addEventListener("click", function(event) {
+		initMe.FNS.switch();
+	});
+
+
+
+});
+</script>
+
+
+
+
+
+

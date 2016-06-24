@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <link href='public/css/digiden.css' rel='stylesheet' type='text/css'>
+
+    <script src="http://sephreed.github.io/PINE/PINE_Core_4.2.js"></script>
+	<script src="http://sephreed.github.io/PINE/PINE_Var.js"></script>
+	<script src="http://sephreed.github.io/PINE/PINE_Needles.js"></script>
+	<needle src="public/needles/selectableList.html"></needle>
+</head>
+
+
+<script type="text/javascript">
+	var query_cache = [];
+    var local_query_cache = localStorage.getItem("query_cache");
+    if(local_query_cache != null) {
+        console.log(local_query_cache);
+        query_cache = JSON.parse(local_query_cache);
+    }
+</script>
+
+
+<body>
+<pine>
+
+<h1>Query Cache</h1>
+<div id="query_list" 
+	spawner="query_cache"
+	selectableList
+	selectableLimit="none">
+	<div spawn selectableItem>{{query_cache[i]}}</div>
+</div>
+
+</pine>
+</body>
+
+
+<style>
+#query_list {
+	padding: 10px;
+}
+
+#query_list >div[selected] {
+	background: orange;
+}
+</style>
+
+
+</html>
+
+
+
+
+
+
+
