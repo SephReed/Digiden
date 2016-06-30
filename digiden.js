@@ -19,5 +19,5 @@ function setLightMode(onOff) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    setLightMode(localStorage.getItem("LIGHT_MODE") == "true");    
+    setLightMode(localStorage.getItem("LIGHT_MODE") != "false");    
 });

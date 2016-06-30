@@ -89,12 +89,14 @@
     function search() {
     	El.byId("main_body").classList.add("results_mode");
 
-        if(ALLOW_QUERY_STORAGE) {
+        if(ALLOW_QUERY_CACHING) {
             var query = El.byId("search_box").value;
             if(QUERY_CACHE.indexOf(query) == -1) {
                 QUERY_CACHE.push(query);
                 localStorage.setItem("QUERY_CACHE", JSON.stringify(QUERY_CACHE));
             }
+
+            enableQueryCacheWarning();
         }
     }
 
@@ -102,8 +104,8 @@
     	var dropdown =  El.byId("settings_dropdown");
     	dropdown.className = "displayed";
 
-    	if(ALLOW_QUERY_STORAGE == null) {
-    		El.byId("data_warning").className += " choice_made";
+    	if(ALLOW_QUERY_CACHING == null) {
+    		El.byId("data_warning").classList.add("choice_made");
     	}
 
     	var mouseupFunc = function(event) {
@@ -120,20 +122,19 @@
 
     
 
-    var tmp_ALLOW_QUERY_STORAGE = localStorage.getItem("allow_local_data")
-    var ALLOW_QUERY_STORAGE;
-    if(tmp_ALLOW_QUERY_STORAGE == "true")  ALLOW_QUERY_STORAGE = true;
-    else if(tmp_ALLOW_QUERY_STORAGE == "false")  ALLOW_QUERY_STORAGE = false;
+    var tmp_ALLOW_QUERY_CACHING = localStorage.getItem("ALLOW_QUERY_CACHING")
+    var ALLOW_QUERY_CACHING;
+    if(tmp_ALLOW_QUERY_CACHING == "true")  ALLOW_QUERY_CACHING = true;
+    else if(tmp_ALLOW_QUERY_CACHING == "false")  ALLOW_QUERY_CACHING = false;
     
-    // console.log(localStorage.getItem("allow_local_data"), ALLOW_QUERY_STORAGE);
+    // console.log(localStorage.getItem("ALLOW_QUERY_CACHING"), ALLOW_QUERY_CACHING);
 
 
 
-    function allow_local_data(yesNo) {
-
-    	ALLOW_QUERY_STORAGE = yesNo;
-        console.log(ALLOW_QUERY_STORAGE)
-    	localStorage.setItem("allow_local_data", ALLOW_QUERY_STORAGE);
+    function setQueryCachingEnabled(yesNo) {
+    	ALLOW_QUERY_CACHING = yesNo;
+        console.log(ALLOW_QUERY_CACHING)
+    	localStorage.setItem("ALLOW_QUERY_CACHING", ALLOW_QUERY_CACHING);
     	El.byId("data_warning").classList.add("choice_made");
     }
 
@@ -149,7 +150,7 @@
 
     
     document.addEventListener("DOMContentLoaded", function() {
-        if(ALLOW_QUERY_STORAGE === true || ALLOW_QUERY_STORAGE === false)
+        if(ALLOW_QUERY_CACHING === true || ALLOW_QUERY_CACHING === false)
             El.byId("data_warning").style.display = "none";
 
         var preQuery = getQuery("queryTerm");
@@ -158,7 +159,20 @@
             El.byId("search_box").value = preQuery;
             search();
         } 
+
+
+        if(QUERY_CACHE.length) 
+            enableQueryCacheWarning();
     });
+
+
+    function enableQueryCacheWarning() {
+        var btn = El.byId("query_storage_btn");
+        El.attr(btn, "tooltip", 'You already have some queries cached.  To erase them, go to "View Cached Data"');
+        btn.classList.add("switch_warn");
+    }
+
+
 
     PINE.ready(function() {
         setTimeout(function() {
@@ -191,8 +205,10 @@
 <div id="settings_dropdown">
 
     Enable Query Caching
-    <switch onswitch="allow_local_data" 
-        switchInit="ALLOW_QUERY_STORAGE">
+    <switch id="query_storage_btn"
+        tooltip=""
+        onswitch="setQueryCachingEnabled" 
+        switchInit="ALLOW_QUERY_CACHING">
         </switch><br>
 
    <!--  Allow Results Caching
@@ -299,8 +315,10 @@
 
 <div id="data_warning">
 	Digiden can store your queries and results locally for use as suggestions.  Would you like this enabled?
-	<button id="data_allow" onclick="allow_local_data(true)">Yes Please</button>
-	<button id="data_no" onclick="allow_local_data(false)">No Thank You</button>
+    <div style="display:inline-block">
+	   <button id="data_allow" onclick="setQueryCachingEnabled(true)">Yes Please</button>
+	   <button id="data_no" onclick="setQueryCachingEnabled(false)">No Thank You</button>
+    </div>
 </div>
 
 
@@ -654,22 +672,22 @@
             width: 100%;
             background: #9c003c;
             color: #FAFAFA;
+            animation-fill-mode: forwards;
+            animation-duration: 0s;
         }
 
         
 
         .results_mode #data_warning {
-            opacity: 0;
+            display: none;
         }
+
 
         #data_warning.choice_made {
             animation-name: squeeze_to_settings;
-            animation-fill-mode: forwards;
-            animation-duration: 0s;
         }
 
         .page_loaded #data_warning{
-            transition: opacity ease 0.25s;
             animation-duration: .75s;
         }
 
@@ -697,9 +715,15 @@
             float: right;
         }
 
+        switch.switch_warn {
+            background-image: url("public/images/on_off_warn.png");
+        }
+
         switch[selected] {
             background-image: url("public/images/on_off1.png");
         }
+
+
 
         button {
             cursor: pointer;

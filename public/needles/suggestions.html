@@ -113,7 +113,7 @@ p_sugg.addFunction(PINE.ops.COMMON, function(initMe) {
 					sugg_spawner.style.display = "none";
 			}
 			else {
-				if(sugg_spawner != undefined) 
+				if(sugg_spawner != undefined && sugg_out.length > 0) 
 					sugg_spawner.style.display = "inherit";	
 
 				if(selectable_list != undefined) 
@@ -147,7 +147,9 @@ p_sugg.addFunction(PINE.ops.COMMON, function(initMe) {
 					sugg_spawner.style.display = "none";
 
 				else {
-					sugg_spawner.style.display = "inherit";					
+					if(sugg_out.length > 0)
+						sugg_spawner.style.display = "inherit";					
+					
 					sugg_spawner.FNS.update();
 				}
 			}
