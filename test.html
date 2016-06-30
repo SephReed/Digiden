@@ -1,0 +1,50 @@
+<style>
+[tooltip]:before {
+    /* needed - do not touch */
+    content: attr(tooltip);
+    position: absolute;
+    opacity: 0;
+    
+    /* customizable */
+    transition: all 0.15s ease;
+    transition-delay: 0.5s;
+    padding: 4px;
+    color: #333;
+    background-color: rgba(255,255,255,0.95);
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.3);
+    box-shadow: 2px 2px 1px rgba(0,0,0,0.1);    
+}
+
+[tooltip]:hover:before {
+    /* needed - do not touch */
+    opacity: 1;
+    
+    /* customizable */
+    /*margin-top: -50px;*/
+    /*margin-left: 20px;    */
+}
+
+[tooltip]:not([tooltip-persistent]):before {
+    pointer-events: none;
+}
+
+div {
+	margin: 20px;
+}
+
+</style>
+
+
+<body>
+<div>Standard div, no tooltip here</div>
+
+
+<div tooltip="Hi, I'm a tooltip. Pretty easy uh ? ;)">Div with standard tooltip. Hover me to see the tooltip.
+    <br/>Hovering the tooltip doesn't matter:
+    <br/>if you hover out of my boundaries, the tooltip will disappear.</div>
+
+
+<div tooltip="Hi, I'm a persistent tooltip. I won't disappear when hovering me even if out of my parent boundaries. I'll also prevent other tooltips to fire :)" tooltip-persistent>Div with persistent tooltip. Hover me to see the tooltip.
+    <br/>The tooltip won't expire until you hover on me OR it.</div>
+</body>

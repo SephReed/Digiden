@@ -36,14 +36,40 @@ body {
     background-color: #222;
     /*background: linear-gradient(#14201E, #222);*/
     color: #999;
+    
+}
+
+body.page_loaded {
+	transition-property: background-color, color;
+    transition-duration: 0.5s;
+    /*transition-duration: 0s;*/
+    transition-timing-function: ease;	
 }
 
 
 body.light_mode {
-	/*background-color: #E1FFF6;*/
 	background: #FFF;
 	color: #333;
 }
+
+body.earth_mode {
+	background: linear-gradient(#b6faff, #ffd784);
+	color: #333;
+}
+
+
+
+#title {
+    font-size: 50px;
+    text-shadow: 1px 1px rgba(0,0,0,0.2), -1px -1px rgba(234, 207, 57, 0.2);
+}
+
+#title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
 
 
 
