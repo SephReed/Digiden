@@ -88,9 +88,20 @@
 
     function search() {
     	El.byId("main_body").classList.add("results_mode");
+        var query = El.byId("search_box").value;
+        var new_url = window.location.href;
+        console.log(new_url)
+
+        var uri_query = query.replace(/\+/g, "%2b");
+        console.log(uri_query);
+        uri_query = uri_query.replace(/\s+/g, '+');
+        console.log(uri_query);
+        new_url = new_url.replace(/\?.*$/g, '') + "?q=" + uri_query;
+
+        
+        history.pushState(undefined, "", new_url);
 
         if(ALLOW_QUERY_CACHING) {
-            var query = El.byId("search_box").value;
             if(QUERY_CACHE.indexOf(query) == -1) {
                 QUERY_CACHE.push(query);
                 localStorage.setItem("QUERY_CACHE", JSON.stringify(QUERY_CACHE));
@@ -141,7 +152,7 @@
 
     function getQuery(name){
         if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(window.location.search))
-            return decodeURIComponent(name[1]);
+            return name[1];
 
         else return undefined;
     }
@@ -153,9 +164,13 @@
         if(ALLOW_QUERY_CACHING === true || ALLOW_QUERY_CACHING === false)
             El.byId("data_warning").style.display = "none";
 
-        var preQuery = getQuery("queryTerm");
+        var preQuery = getQuery("q");
         console.log("")
         if(preQuery) {
+            console.log(preQuery)
+            preQuery = preQuery.replace(/\+/g, ' ');
+            preQuery = preQuery.replace(/%2b/g, '+');
+            console.log(preQuery)
             El.byId("search_box").value = preQuery;
             search();
         } 

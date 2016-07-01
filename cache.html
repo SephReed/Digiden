@@ -92,7 +92,9 @@
     	var selected = query_list.FNS.getSelected();
     	if(selected.length) {
     		var query = El.attr(selected[0], "itemValue");
-    		document.location.href = "index.html?queryTerm="+query;	
+    		query = query.replace(/\+/g, '%2b');
+    		query = query.replace(/\s+/g, '+');
+    		document.location.href = "index.html?q="+query;	
     	}
     	
     }
