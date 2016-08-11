@@ -7,15 +7,17 @@
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
     <link href='public/css/digiden.css' rel='stylesheet' type='text/css'>
 
+    <script type="text/javascript" src="public/js/AES.js"></script>
+    <script type="text/javascript" src="public/js/SAFE.js"></script>
     <script src="digiden.js"></script>
 
-    <script src="http://sephreed.github.io/PINE/PINE_Core_4.2.js"></script>
-	<script src="http://sephreed.github.io/PINE/PINE_Var.js"></script>
-	<script src="http://sephreed.github.io/PINE/PINE_Needles.js"></script>
-    <!-- <script src="http://sephreed.github.io/PINE/PINE_Includes.js"></script> -->
-    <!-- <needle src="http://sephreed.github.io/PINE/needles/overlay.html"></needle> -->
-    <!-- <needle src="http://sephreed.github.io/PINE/needles/bgimg.html"></needle> -->
-    <script src="http://sephreed.github.io/PINE/needles/onreturn.js"></script>
+    <script src="http://SephReed.github.io/PINE/PINE_Core_4.2.js"></script>
+	<script src="http://SephReed.github.io/PINE/PINE_Var.js"></script>
+	<script src="http://SephReed.github.io/PINE/PINE_Needles.js"></script>
+    <!-- <script src="http://SephReed.github.io/PINE/PINE_Includes.js"></script> -->
+    <!-- <needle src="http://SephReed.github.io/PINE/needles/overlay.html"></needle> -->
+    <!-- <needle src="http://SephReed.github.io/PINE/needles/bgimg.html"></needle> -->
+    <script src="http://SephReed.github.io/PINE/needles/onreturn.js"></script>
     <needle src="public/needles/selectableList.html"></needle>
     <needle src="public/needles/suggestions.html"></needle>
     <needle src="public/needles/tooltip.html"></needle>
@@ -27,59 +29,10 @@
     </style>
 
     <script type="text/javascript">
-    // 	var response = {
-    // 		{
-    // 			type: "names",
-    // 			claims: [
-    // 				{ type: "first_name", value: "Seph"},
-    // 				{ type: "last_name", value: "Reed"},
-    // 				{ type: "nick_name", value: "SephPi"},
-    // 			]
-    // 		},
-    // 		{
-    // 			type: "network",
-    // 			claims: [
-    // 				{ type: "girlfriend", value: "Misty", args:"super_primary"},
-    // 				{ type: "employer", value: "Tinkering School"},
-    // 				{ type: "employer", value: "ThaiFresh", args:"inactive"},
-    // 			]
-    // 		},
-    // 		{
-    // 			type: "contact",
-    // 			claims: [
-    // 				{ type: "email", value: "Misty", args:"super_primary"},
-    // 				{ type: "phone_daytime", value: "Tinkering School"},
-    // 				{ type: "phone_nightime", value: "ThaiFresh", args:"inactive"},
-    // 			]
-    // 		},
-    // 		{
-    // 			type: "personal",
-    // 			claims: [
-    // 				{ type: "acomplishments", value: "Misty", args:"super_primary"},
-    // 				{ type: "acomplishments", value: "Misty", args:"super_primary"},
-    // 				{ type: "acomplishments", value: "Misty", args:"super_primary"},
-    // 				{ type: "acomplishments", value: "Misty", args:"super_primary"},
-    // 				{ type: "url", value: "Tinkering School"},
-    // 			]
-    // 		},
-
-    // 	}
-
-
-
-
-
-
-    // var query_cache = [
-    //     "test",
-    //     "woo yeah",
-    //     "woopty woopty woo"
-    // ]
-
 
 
     var QUERY_CACHE = [];
-    var local_query_cache = localStorage.getItem("QUERY_CACHE");
+    var local_query_cache = SAFE.get("QUERY_CACHE");
     if(local_query_cache != null) {
         console.log(local_query_cache);
         QUERY_CACHE = JSON.parse(local_query_cache);
@@ -87,8 +40,10 @@
   
 
     function search() {
+        El.attr(El.byId("digiden_link"), "href", "index.html");
+
     	El.byId("main_body").classList.add("results_mode");
-        var query = El.byId("search_box").value;
+        var query = El.byId("search_bar").value;
         var new_url = window.location.href;
         console.log(new_url)
 
@@ -104,7 +59,7 @@
         if(ALLOW_QUERY_CACHING) {
             if(QUERY_CACHE.indexOf(query) == -1) {
                 QUERY_CACHE.push(query);
-                localStorage.setItem("QUERY_CACHE", JSON.stringify(QUERY_CACHE));
+                SAFE.set("QUERY_CACHE", JSON.stringify(QUERY_CACHE));
             }
 
             enableQueryCacheWarning();
@@ -133,19 +88,16 @@
 
     
 
-    var tmp_ALLOW_QUERY_CACHING = localStorage.getItem("ALLOW_QUERY_CACHING")
-    var ALLOW_QUERY_CACHING;
-    if(tmp_ALLOW_QUERY_CACHING == "true")  ALLOW_QUERY_CACHING = true;
-    else if(tmp_ALLOW_QUERY_CACHING == "false")  ALLOW_QUERY_CACHING = false;
     
-    // console.log(localStorage.getItem("ALLOW_QUERY_CACHING"), ALLOW_QUERY_CACHING);
+    
+    // console.log(SAFE.get("ALLOW_QUERY_CACHING"), ALLOW_QUERY_CACHING);
 
 
 
     function setQueryCachingEnabled(yesNo) {
     	ALLOW_QUERY_CACHING = yesNo;
         console.log(ALLOW_QUERY_CACHING)
-    	localStorage.setItem("ALLOW_QUERY_CACHING", ALLOW_QUERY_CACHING);
+    	SAFE.set("ALLOW_QUERY_CACHING", ALLOW_QUERY_CACHING);
     	El.byId("data_warning").classList.add("choice_made");
     }
 
@@ -158,12 +110,21 @@
     }
 
 
+    PAGE = {};
 
-    
-    document.addEventListener("DOMContentLoaded", function() {
+    var ALLOW_QUERY_CACHING;
+    PAGE.init = function() {
+        ALLOW_QUERY_CACHING = SAFE.get("ALLOW_QUERY_CACHING") == "true";
+    }
+    PAGE.init();
+
+
+    PAGE.onContent = function() {
+        console.log(ALLOW_QUERY_CACHING, "ALL")
         if(ALLOW_QUERY_CACHING === true || ALLOW_QUERY_CACHING === false)
             El.byId("data_warning").style.display = "none";
 
+        // var preQuery = U.getHttpArg("q");
         var preQuery = getQuery("q");
         console.log("")
         if(preQuery) {
@@ -171,14 +132,65 @@
             preQuery = preQuery.replace(/\+/g, ' ');
             preQuery = preQuery.replace(/%2b/g, '+');
             console.log(preQuery)
-            El.byId("search_box").value = preQuery;
+            El.byId("search_bar").value = preQuery;
             search();
         } 
 
 
-        if(QUERY_CACHE.length) 
+        if(QUERY_CACHE.length) {
             enableQueryCacheWarning();
-    });
+
+            if(SAFE.isOpen())
+                alert("Session Key in Use");
+        }
+
+
+        /************************
+        *   Set Key Function
+        ***********************/
+        var set_key = El.byId("set_key");
+        set_key.addEventListener("keyup", function(event) {
+            var key = event.key;
+            if(key == "Enter") {
+                SAFE.session(set_key.value);
+                set_key.style.display = "none";
+                forget_key.style.display = "";
+            }
+        });
+
+        var forget_key = El.byId("forget_key");
+        forget_key.addEventListener("click", function() {
+            SAFE.lock();
+            set_key.style.display = "";
+            forget_key.style.display = "none";
+        });
+
+        if(SAFE.isOpen()) 
+            set_key.style.display = "none";
+
+        else
+            forget_key.style.display = "none";
+    }
+
+
+    PAGE.loadSettings = function() {
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            if(ALLOW_QUERY_CACHING === true || ALLOW_QUERY_CACHING === false)
+                El.byId("data_warning").style.display = "none";    
+            else
+                El.byId("data_warning").style.display = "";    
+        });
+        
+        // else
+    }
+
+
+    
+    document.addEventListener("DOMContentLoaded", PAGE.onContent);
+    // El.domReady(PAGE.onContent);
+    // El.docReady(PAGE.onContent);
 
 
     function enableQueryCacheWarning() {
@@ -193,7 +205,6 @@
         setTimeout(function() {
             El.byId("main_body").classList.add("page_loaded");
         }, 750);
-        
     });
 
 
@@ -236,6 +247,13 @@
         switchInit="LIGHT_MODE_ENABLED">
         </switch><br>
 
+    
+        
+    Session Key: <input displayItem="on" id="set_key" type="password" placeholder="your private key">
+    <button displayItem id="forget_key">Expire</button><br>
+
+    
+
     <a href="cache.html">View Cached Data</a><br>
 
     <a href="about.html#privacy">Privacy Statement</a><br>
@@ -247,9 +265,9 @@
 <div id="top_pad"></div>
 
 <div id="searcharea">
-	<div id="title"><a href="about.html">Digiden</a></div>
-	<div id="search_bar">
-		<input id="search_box" 
+	<div id="title"><a id="digiden_link" href="about.html">Digiden</a></div>
+	<div id="search_box">
+		<input id="search_bar" 
             type="text" 
             onreturn="search" 
             suggestions="QUERY_CACHE"
@@ -345,96 +363,130 @@
 
 
 
- <style>
 
-        #suggestion_dropdown {
-            width: 100%;
-            font-size: 14px;
-            background: rgba(80,80,80,0.975);
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-            box-shadow: 1px 1px 10px rgba(250,250,250,0.1);
-            border: 1px solid rgba(0,0,0,0.3);
-            overflow: scroll;
-            max-height: 200px;
+
+
+<style>
+
+/*******************
+*   DEFAULT ITEMS
+********************/
+
+
+input {
+    border: 1px solid transparent;
+    border-radius: 2px;
+}
+
+    .light_mode input {
+        border: 1px solid rgba(0,0,0,0.3);
+        box-shadow: 1px 3px 8px rgba(0,0,0,0.1);
+    }
+
+
+switch {
+    display: inline-block;
+    height: 17px;
+    width: 40px;
+    background-image: url("public/images/on_off0.png");
+    margin-left: 10px;
+    cursor: pointer;
+    float: right;
+}
+
+    switch.switch_warn {
+        background-image: url("public/images/on_off_warn.png");
+    }
+
+    switch[selected] {
+        background-image: url("public/images/on_off1.png");
+    }
+
+
+
+button {
+    cursor: pointer;
+    padding: 4px;
+    background: #FAFAFA;
+    border: 1px solid rgba(0,0,0,0.3);
+    box-shadow: 1px 1px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    color: #333;
+    font-size: 13px;
+}
+
+    button:hover {
+        background: #BBB;
+    }
+
+
+
+
+
+/*******************
+*     SETTINGS
+********************/
+
+
+#settings {
+    display: block;
+    /*cursor: pointer;*/
+    cursor: context-menu;
+    position: absolute;
+    right: 0px;
+    top: 2px;
+    height: 50px;
+    width: 50px;
+    z-index: 15;
+    background-image: url("public/images/gear_icon.png");
+    background-size: 60% auto;
+    opacity: 0.8;
+}
+
+    
+    .page_loaded #settings {
+        transition: all ease 0.5s;
+    }
+
+    .light_mode #settings {
+        filter: invert(100%);
+    }
+
+    .results_mode #settings {
+        filter: none;
+        opacity: 0.95;
+    }
+
+    #settings:hover {
+        transform: rotate(5deg);
+    }
+
+    #settings_dropdown {
+        background: #444;
+        color: #FAFAFA;
+        position: absolute;
+        right: 25px;
+        top: 25px;
+        z-index: 20;
+        padding: 10px;
+        opacity: 0;
+        border-radius: 8px;
+        border-top-right-radius: 2px;
+        border: 1px solid rgba(0,0,0,0.2);
+        box-shadow: 1px 1px 10px rgba(0,0,0,0.3);
+        pointer-events: none;
+    }
+
+        #settings_dropdown input {
+            display: inline-block;
+            float: right;
+            padding: 2px 4px;
         }
 
-        .light_mode #suggestion_dropdown {
-            background: white;
-            color: #888;
-        }
-
-        .highlight_true {
-            color: #EEE;
-        }
-
-        .light_mode .highlight_true {
-            color: #0A0A0A;
-        }
-
-        #suggestion_dropdown > div {
-            margin: 2px;
-            padding: 0px 8px;
-            overflow: hidden;
-            border-radius: 10px;
-        }
-
-        #suggestion_dropdown > div[selected] {
-            background: rgba(0, 250, 250, 0.2);
-        }
-
-        .light_mode #suggestion_dropdown > div[selected] {
-            background: rgba(0, 120, 120, 0.2);
-        }
-
-
-        #settings {
-            display: block;
-            /*cursor: pointer;*/
-            cursor: context-menu;
-            position: absolute;
-            right: 0px;
-            top: 2px;
-            height: 50px;
-            width: 50px;
-            z-index: 15;
-            background-image: url("public/images/gear_icon.png");
-            background-size: 60% auto;
-            opacity: 0.8;
-            
-        }
-
-        .page_loaded #settings {
-            transition: all ease 0.5s;
-        }
-
-        .light_mode #settings {
-            filter: invert(100%);
-        }
-
-        .results_mode #settings {
-            filter: none;
-            opacity: 0.95;
-        }
-
-        #settings:hover {
-            transform: rotate(5deg);
-        }
-
-        #settings_dropdown {
-            background: #444;
-            color: #FAFAFA;
-            position: absolute;
-            right: 25px;
-            top: 25px;
-            z-index: 20;
-            padding: 10px;
-            opacity: 0;
-            border-radius: 8px;
-            border-top-right-radius: 2px;
-            border: 1px solid rgba(0,0,0,0.2);
-            box-shadow: 1px 1px 10px rgba(0,0,0,0.3);
-            pointer-events: none;
+        #settings_dropdown button {
+            display: inline-block;
+            float: right;
+            padding: 2px 4px;
         }
 
         .page_loaded #settings_dropdown {
@@ -454,123 +506,59 @@
         }
 
 
-        #top_pad {
-            height: 28%;
-        }
-
-        .page_loaded #top_pad {
-            transition: 0.25s ease all;
-            transition-delay: 0.25s;
-        }
-
-        .results_mode #top_pad {
-            height: 0px;
-        }
-
-    
 
 
-        #searcharea {
-            position: fixed;
-            z-index: 10;
-            width: 100%;
-        }
+/*******************
+*     TOP PAD
+********************/
 
-        .page_loaded #searcharea {
-            transition: background ease 0.25s;
-            transition-delay: 0.35s;
-        }
+#top_pad {
+    height: 28%;
+}
 
-        .results_mode #searcharea{
-            background: #9c003c;
-        }
+    .page_loaded #top_pad {
+        transition: 0.25s ease all;
+        transition-delay: 0.25s;
+    }
 
-        
-        #content {
-            display: block;
-            position: absolute;
-            top: 100%;
-            bottom: 0px;
-            width: 100%;
-            overflow: scroll;
-        /*}
-
-        .page_loaded #content {*/
-            transition: top ease 0.25s;
-            transition-delay: 0.25s;
-        }
-        
-
-        .results_mode #content {
-            top: 63px;
-        }
-
-       
+    .results_mode #top_pad {
+        height: 0px;
+    }
 
 
-        #searcharea input {
-            padding: 5px 50px 5px 12px;
-            font-size: 25px;
-            border: 1px solid transparent;
-            border-radius: 2px;
-            width: 100%;
-        }
 
 
-        .light_mode #searcharea input {
-            border: 1px solid rgba(0,0,0,0.3);
-            box-shadow: 1px 3px 8px rgba(0,0,0,0.1);
-        }
-
-        .results_mode #searcharea input {
-            border: none;
-        }
-
-        #search_bar {
-            position: absolute;
-            top: 100px;
-            left: 20%;
-            right: 20%;
-        }
-
-        .page_loaded #search_bar{
-            transition: all ease 0.25s;
-            transition-delay: 0.125s;
-        }
-
-        .results_mode #search_bar {
-            top: 7px;
-            left: 175px;
-            right: 8%;
-        }
 
 
-        #search_button {
-            position: absolute;
-            right: 5px;
-            top: 0px;
-            height: 50px;
-            width: 50px;
-            background-image: url("public/images/search_icon.png");
-            background-position: right;
-            background-size: auto 80%;
-            opacity: 0.75;
-            cursor: pointer;
-        }
+/*******************
+*   SEARCH AREA
+********************/
 
-        #search_button:hover {
-            opacity: 1.0;
-        }
 
-        #title {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 35px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+#searcharea {
+    position: fixed;
+    z-index: 10;
+    width: 100%;
+}
 
-        
+    .page_loaded #searcharea {
+        transition: background ease 0.25s;
+        transition-delay: 0.35s;
+    }
+
+    .results_mode #searcharea{
+        background: #9c003c;
+    }
+
+
+
+    #title {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 35px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 
         #title a {
             cursor: help;
@@ -614,17 +602,167 @@
             }
         }
 
-       
 
+    #search_box {
+        position: absolute;
+        top: 100px;
+        left: 20%;
+        right: 20%;
+    }
 
-        
-
-        
-
-        #results {
-            display: none;
-            margin: 20px 175px 50px 8%;
+        .page_loaded #search_box{
+            transition: all ease 0.25s;
+            transition-delay: 0.125s;
         }
+
+        .results_mode #search_box {
+            top: 7px;
+            left: 175px;
+            right: 8%;
+        }
+
+
+        #search_button {
+            position: absolute;
+            right: 5px;
+            top: 0px;
+            height: 50px;
+            width: 50px;
+            background-image: url("public/images/search_icon.png");
+            background-position: right;
+            background-size: auto 80%;
+            opacity: 0.75;
+            cursor: pointer;
+        }
+
+            #search_button:hover {
+                opacity: 1.0;
+            }
+
+
+        #search_bar {
+            padding: 5px 50px 5px 12px;
+            font-size: 25px;
+            width: 100%;
+        }
+
+            .results_mode #search_bar {
+                border: none;
+            }
+
+
+
+        #suggestion_dropdown {
+            width: 100%;
+            font-size: 14px;
+            background: rgba(80,80,80,0.975);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-shadow: 1px 1px 10px rgba(250,250,250,0.1);
+            border: 1px solid rgba(0,0,0,0.3);
+            overflow: scroll;
+            max-height: 200px;
+        }
+
+            .light_mode #suggestion_dropdown {
+                background: white;
+                color: #888;
+            }
+
+            
+
+            #suggestion_dropdown > div {
+                margin: 2px;
+                padding: 0px 8px;
+                overflow: hidden;
+                border-radius: 10px;
+            }
+                .highlight_true {
+                    color: #EEE;
+                }
+
+                .light_mode .highlight_true {
+                    color: #0A0A0A;
+                }
+
+                #suggestion_dropdown > div[selected] {
+                    background: rgba(0, 250, 250, 0.2);
+                }
+
+                .light_mode #suggestion_dropdown > div[selected] {
+                    background: rgba(0, 120, 120, 0.2);
+                }
+
+
+
+
+
+
+
+
+
+/*******************
+*   FADE TOP
+********************/
+
+
+#fade_top {
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
+    z-index: 5;
+    top: 41px;
+    height: 45px;
+    width: 100%;
+    background: linear-gradient(transparent, #222 20px, #222 30px, transparent);
+}
+
+    .page_loaded #fade_top {
+        transition: all ease 2.0s;
+    }
+
+    .results_mode #fade_top {
+        opacity: 1.0;
+    }
+
+    .results_mode.light_mode #fade_top {
+        background: linear-gradient(transparent, #FFF 20px, transparent);
+        height: 35px;
+        opacity: 0.8;
+    }
+
+
+
+
+
+
+/*******************
+*   SEARCH RESULTS
+********************/
+
+
+#content {
+    display: block;
+    position: absolute;
+    top: 100%;
+    bottom: 0px;
+    width: 100%;
+    overflow: scroll;
+    transition: top ease 0.25s;
+    transition-delay: 0.25s;
+}
+
+
+    .results_mode #content {
+        top: 63px;
+    }
+
+
+
+    #results {
+        display: none;
+        margin: 20px 175px 50px 8%;
+    }
 
         .results_mode #results {
             display: block;
@@ -650,155 +788,109 @@
             box-shadow: 1px 1px 5px rgba(0,0,0,0.05);
         }
 
-        
-
-        #fade_top {
-            opacity: 0;
-            position: absolute;
-            pointer-events: none;
-            z-index: 5;
-            top: 41px;
-            height: 45px;
-            width: 100%;
-            background: linear-gradient(transparent, #222 20px, #222 30px, transparent);
-        }
-
-        .page_loaded #fade_top {
-            transition: all ease 2.0s;
-        }
-
-        .results_mode #fade_top {
-            opacity: 1.0;
-        }
-
-        .results_mode.light_mode #fade_top {
-            background: linear-gradient(transparent, #FFF 20px, transparent);
-            height: 35px;
-            opacity: 0.8;
-        }
-
-        #data_warning {
-            position: fixed;
-            text-align: center;
-            top: 0px;
-            left: 0px;
-            padding: 10px;
-            padding-right: 40px;
-            width: 100%;
-            background: #9c003c;
-            color: #FAFAFA;
-            animation-fill-mode: forwards;
-            animation-duration: 0s;
-        }
-
-        
-
-        .results_mode #data_warning {
-            display: none;
-        }
-
-
-        #data_warning.choice_made {
-            animation-name: squeeze_to_settings;
-        }
-
-        .page_loaded #data_warning{
-            animation-duration: .75s;
-        }
-
-        @keyframes squeeze_to_settings {
-            0%{}
-            25% {
-                left: calc(100% - 50px);
-                opacity: 1;
-                border-radius: 10px;
-            }
-            100%{
-                left: calc(100% - 50px);
-                opacity: 0;
-                border-radius: 10px;
-            }
-        }
-
-        switch {
-            display: inline-block;
-            height: 17px;
-            width: 40px;
-            background-image: url("public/images/on_off0.png");
-            margin-left: 10px;
-            cursor: pointer;
-            float: right;
-        }
-
-        switch.switch_warn {
-            background-image: url("public/images/on_off_warn.png");
-        }
-
-        switch[selected] {
-            background-image: url("public/images/on_off1.png");
-        }
 
 
 
-        button {
-            cursor: pointer;
-            padding: 4px;
-            background: #FAFAFA;
-            border: 1px solid rgba(0,0,0,0.3);
-            box-shadow: 1px 1px rgba(0,0,0,0.3);
+
+/*******************
+*   DATA WARNING
+********************/
+
+
+#data_warning {
+    position: fixed;
+    text-align: center;
+    top: 0px;
+    left: 0px;
+    padding: 10px;
+    padding-right: 40px;
+    width: 100%;
+    background: #9c003c;
+    color: #FAFAFA;
+    animation-fill-mode: forwards;
+    animation-duration: 0s;
+}
+    #data_allow:hover {
+        background: #7eff76;
+    }
+
+    #data_no:hover {
+        background: #ffa631;
+    }
+
+
+    .results_mode #data_warning {
+        display: none;
+    }
+
+
+    #data_warning.choice_made {
+        animation-name: squeeze_to_settings;
+    }
+
+    .page_loaded #data_warning{
+        animation-duration: .75s;
+    }
+
+    @keyframes squeeze_to_settings {
+        0%{}
+        25% {
+            left: calc(100% - 50px);
+            opacity: 1;
             border-radius: 10px;
-            color: #333;
-            font-size: 13px;
         }
-
-        button:hover {
-            background: #BBB;
+        100%{
+            left: calc(100% - 50px);
+            opacity: 0;
+            border-radius: 10px;
         }
+    }
 
-        #data_allow:hover {
-            background: #7eff76;
-        }
 
-        #data_no:hover {
-            background: #ffa631;
-        }
 
-        @media all and (max-width: 800px) {
-            #results {
-                margin: 30px 8% 50px 8%;
-            }
 
-            #search_bar {
-                left: 8%;
-                right: 8%;
-            }
-        }
+/*******************
+*   SIZING STUFF
+********************/
 
-        @media all and (max-width: 400px) {
-            #title {
-                font-size: 35px;
-            }
 
-            .results_mode #title {
-                left: 4%;
-            }
 
-            .results_mode #search_bar {
-                top: 7px;
-                left: 50px;
-                right: 50px;
-            }
+@media all and (max-width: 800px) {
+    #results {
+        margin: 30px 8% 50px 8%;
+    }
 
-            #results {
-                margin: 30px 4% 50px 4%;
-            }
+    #search_box {
+        left: 8%;
+        right: 8%;
+    }
+}
 
-            #search_bar {
-                left: 4%;
-                right: 4%;
-            }
-        }
-    </style>
+@media all and (max-width: 400px) {
+    #title {
+        font-size: 35px;
+    }
+
+    .results_mode #title {
+        left: 4%;
+    }
+
+    .results_mode #search_box {
+        top: 7px;
+        left: 50px;
+        right: 50px;
+    }
+
+    #results {
+        margin: 30px 4% 50px 4%;
+    }
+
+    #search_box {
+        left: 4%;
+        right: 4%;
+    }
+}
+</style>
 
 
 

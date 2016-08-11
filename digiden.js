@@ -6,7 +6,7 @@ function setLightMode(onOff) {
         //     document.body.style.transitionDuration = "0.5s";
             
         LIGHT_MODE_ENABLED = onOff;
-        localStorage.setItem("LIGHT_MODE", LIGHT_MODE_ENABLED);
+        SAFE.set("LIGHT_MODE", LIGHT_MODE_ENABLED);
 
         if(LIGHT_MODE_ENABLED)
             document.body.classList.add("light_mode");
@@ -19,5 +19,12 @@ function setLightMode(onOff) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-    setLightMode(localStorage.getItem("LIGHT_MODE") != "false");    
+    setLightMode(SAFE.get("LIGHT_MODE") != "false");    
 });
+
+
+
+
+// function initFromUserData() {
+    
+// }
