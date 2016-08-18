@@ -23,7 +23,7 @@ var CURRENT_PASS = sessionStorage.getItem("SAFE_CURRENT_PASS") || '';
 
 
 SAFE.open = function(pass) {
-	var newPass = AES.ECB_Encrypt(pass, "KEEP_IT_SAFE_YO!")
+	var newPass = AES.ECB_Encrypt("KEEP_IT_SAFE_YO!", pass)
 	console.log(newPass)
 	CURRENT_PASS = newPass;
 }

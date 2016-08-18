@@ -40,7 +40,9 @@
   
 
     function search() {
-        El.attr(El.byId("digiden_link"), "href", "index.html");
+        var title = El.byId("digiden_link");
+        El.attr(title, "href", "index.html");
+        title.classList.remove("help_icon");
 
     	El.byId("main_body").classList.add("results_mode");
         var query = El.byId("search_bar").value;
@@ -223,14 +225,13 @@
 
 
 <body id="main_body" class="">
-<pine>
 <bgimg></bgimg>
 
 <div id="settings" onclick="show_settings()"></div>
 
 <div id="settings_dropdown">
 
-    Enable Query Caching
+    <a href="about.html#queryCaching" class="plain help_icon">Enable Query Caching</a>
     <switch id="query_storage_btn"
         tooltip=""
         onswitch="setQueryCachingEnabled" 
@@ -242,15 +243,16 @@
         switchInit="LIGHT_MODE_ENABLED">
         </switch><br> -->
 
+
     Enable Light Mode
     <switch onswitch="setLightMode" 
         switchInit="LIGHT_MODE_ENABLED">
         </switch><br>
 
     
-        
-    Session Key: <input displayItem="on" id="set_key" type="password" placeholder="your private key">
-    <button displayItem id="forget_key">Expire</button><br>
+    <a href="about.html#sessionKey" class="plain help_icon">Session Key:</a>
+        <input displayItem="on" id="set_key" type="password" placeholder="your private key">
+        <button displayItem id="forget_key">Expire</button><br>
 
     
 
@@ -265,7 +267,7 @@
 <div id="top_pad"></div>
 
 <div id="searcharea">
-	<div id="title"><a id="digiden_link" href="about.html">Digiden</a></div>
+	<div id="title"><a id="digiden_link" class="help_icon" href="about.html">Digiden</a></div>
 	<div id="search_box">
 		<input id="search_bar" 
             type="text" 
@@ -355,7 +357,6 @@
 </div>
 
 
-</pine>
 </body>
 
 
@@ -419,6 +420,23 @@ button {
         background: #BBB;
     }
 
+    .light_mode button:hover {
+        background: #D9F5F6;
+    }
+
+
+.help_icon {
+    cursor: help;
+}
+
+a.plain {
+    text-decoration: inherit;
+    color: inherit;
+}
+
+    a.plain:hover {
+        color: inherit;
+    }
 
 
 
@@ -559,10 +577,6 @@ button {
         left: 50%;
         transform: translateX(-50%);
     }
-
-        #title a {
-            cursor: help;
-        }
 
         .light_mode #title {
             color: #9c003c;

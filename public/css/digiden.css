@@ -21,8 +21,12 @@ img {
 	outline : none;
 }
 
-a, a:hover, a:visited {
+a, a:visited {
     color: #DAB875;
+}
+
+a:hover {
+	color: #FFD581;
 }
 
 .light_mode a, .light_mode a:hover, .light_mode a:visited {
