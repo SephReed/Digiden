@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
     <link href='public/css/digiden.css' rel='stylesheet' type='text/css'>
+    <link href='public/css/themes.css' rel='stylesheet' type='text/css'>
 
     <script type="text/javascript" src="public/js/AES.js"></script>
     <script type="text/javascript" src="public/js/SAFE.js"></script>
@@ -37,8 +38,7 @@
     	var delete_btn = El.byId("delete_btn");
     	var query_btn = El.byId("query_btn");
 
-
-    	query_list.FNS.setSelected.add(function() {
+    	var updateButtonDisabledStates = function() {
     		var selected = query_list.FNS.getSelected();
     		
     		console.log(selected)
@@ -54,11 +54,15 @@
     		else
     			delete_btn.classList.add("disabled_btn");
 
-    		if(QUERY_CACHE.length && selected.length != QUERY_CACHE.length)
+    		if(QUERY_CACHE.length > 0 && selected.length != QUERY_CACHE.length)
     			select_all_btn.classList.remove("disabled_btn");
     		else
     			select_all_btn.classList.add("disabled_btn");
-    	});
+    	}
+
+    	updateButtonDisabledStates();
+
+    	query_list.FNS.setSelected.add(updateButtonDisabledStates);
     });
 
 
@@ -117,8 +121,8 @@
 <body>
 <bgimg></bgimg>
 
-<div id="topbar">
-	<div id="title"><a href="index.html">Digiden</a></div>
+<div id="tiny_topbar">
+	<div class="title"><a href="index.html">Digiden</a></div>
 </div>
 
 <pine>
@@ -166,19 +170,7 @@
 
 
 <style>
-#topbar {
-	background-color: #9c003c;
-	height: 60px;
-	display: inline-block;
-	padding-right: 20px;
-	border-bottom-right-radius: 7px;
-}
 
-#title {
-	margin-left: 20px;
-	font-size: 40px;
-	color: #EEE;
-}
 
 #content {
 	position: absolute;

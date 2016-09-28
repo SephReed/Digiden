@@ -4,16 +4,116 @@
 		"selected_items":
 		[
 			[
+				"tex",
+				"text-decoration"
+			],
+			[
+				"help",
+				"help_icon"
+			],
+			[
+				"cl",
+				"classList"
+			],
+			[
+				"digide",
+				"digiden_link"
+			],
+			[
+				"c",
+				"console"
+			],
+			[
+				"ma",
+				"margin-bottom"
+			],
+			[
+				"ke",
+				"keyString"
+			],
+			[
+				"tp",
+				"tmpKey"
+			],
+			[
+				"A",
+				"ALLOW_QUERY_CACHING"
+			],
+			[
+				"get",
+				"getQuery"
+			],
+			[
+				"for",
+				"forget_key"
+			],
+			[
+				"loc",
+				"localStorage"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"co",
+				"console"
+			],
+			[
+				"add",
+				"addEventListener"
+			],
+			[
+				"di",
+				"display"
+			],
+			[
+				"re",
+				"release"
+			],
+			[
+				"sec",
+				"secretKey"
+			],
+			[
+				"se",
+				"secretVal"
+			],
+			[
+				"lo",
+				"localStorage"
+			],
+			[
+				"va",
+				"value"
+			],
+			[
+				"blo",
+				"blocksize"
+			],
+			[
+				"P",
+				"PKCS7_padToBlocksize"
+			],
+			[
+				"AES",
+				"AES_CBC"
+			],
+			[
+				"tri",
+				"trimMe"
+			],
+			[
+				"ra",
+				"randomString"
+			],
+			[
 				"pa",
 				"padding"
 			],
 			[
 				"fo",
 				"font"
-			],
-			[
-				"co",
-				"color"
 			],
 			[
 				"cam",
@@ -108,20 +208,12 @@
 				"initMe"
 			],
 			[
-				"get",
-				"getVarFrom"
-			],
-			[
 				"roo",
 				"rootVar"
 			],
 			[
 				"var",
 				"varName"
-			],
-			[
-				"re",
-				"result"
 			],
 			[
 				"i_",
@@ -184,10 +276,6 @@
 				"eraseMode"
 			],
 			[
-				"fun",
-				"func"
-			],
-			[
 				"ar",
 				"arg1"
 			],
@@ -225,10 +313,6 @@
 			],
 			[
 				"ad",
-				"addToMe"
-			],
-			[
-				"add",
 				"addToMe"
 			],
 			[
@@ -286,10 +370,6 @@
 			[
 				"crea",
 				"createNeedle"
-			],
-			[
-				"P",
-				"PINE"
 			],
 			[
 				"pro",
@@ -434,96 +514,40 @@
 			[
 				"wait",
 				"waitForMe"
-			],
-			[
-				"call",
-				"callbackReturn"
-			],
-			[
-				"then",
-				"thenables"
-			],
-			[
-				"as",
-				"async"
-			],
-			[
-				"per",
-				"permeatePromises"
-			],
-			[
-				"log",
-				"logDone"
-			],
-			[
-				"comp",
-				"complete"
-			],
-			[
-				"wid",
-				"width"
-			],
-			[
-				"ic",
-				"icon_id"
-			],
-			[
-				"icon",
-				"icon_chooser"
-			],
-			[
-				"backgro",
-				"background-size"
-			],
-			[
-				"wi",
-				"width"
-			],
-			[
-				"spa",
-				"spawnerSource"
-			],
-			[
-				"cou",
-				"countAtt"
-			],
-			[
-				"count",
-				"countAtt"
-			],
-			[
-				"di",
-				"display"
-			],
-			[
-				"wall",
-				"wall_lng"
-			],
-			[
-				"top",
-				"topic_tag"
-			],
-			[
-				"backgr",
-				"background-position"
-			],
-			[
-				"styl",
-				"style_include"
-			],
-			[
-				"sty",
-				"style_include"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
+			"file": "index.html",
+			"settings":
+			{
+				"buffer_size": 20168,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "about.html",
+			"settings":
+			{
+				"buffer_size": 1211,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "public/css/digiden.css",
 			"settings":
 			{
-				"buffer_size": 1304,
+				"buffer_size": 1325,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "public/js/SAFE.js",
+			"settings":
+			{
+				"buffer_size": 1404,
 				"line_ending": "Unix"
 			}
 		}
@@ -570,10 +594,21 @@
 	[
 		"/Users/seph/Code/Web/Digiden",
 		"/Users/seph/Code/Web/Digiden/public",
-		"/Users/seph/Code/Web/Digiden/public/css"
+		"/Users/seph/Code/Web/Digiden/public/css",
+		"/Users/seph/Code/Web/Digiden/public/js",
+		"/Users/seph/Code/Web/Digiden/public/needles"
 	],
 	"file_history":
 	[
+		"/Users/seph/Code/Web/Digiden/public/css/digiden.css",
+		"/Users/seph/Code/Web/Digiden/public/js/SAFE.js",
+		"/Users/seph/Code/Web/Digiden/cache.html",
+		"/Users/seph/Code/Web/Digiden/public/js/AES.js",
+		"/Users/seph/Code/Web/Digiden/public/js/jsaes.js",
+		"/Users/seph/Code/Web/Digiden/digiden.js",
+		"/Users/seph/Code/Web/Digiden/public/needles/displayGroup.html",
+		"/Users/seph/Code/Web/Digiden/test.html",
+		"/Users/seph/Code/Web/Digiden/index.html",
 		"/Users/seph/Code/Web/SephReed.github.io/portfolio/portfolio.css",
 		"/Users/seph/Code/Web/SephReed.github.io/portfolio/portfolio.html",
 		"/Users/seph/Code/Web/SephReed.github.io/index.html",
@@ -692,20 +727,11 @@
 		"/Users/seph/Documents/Bitwig Studio/Controller Scripts/eImprov/Quneo/QuneoConstants.js",
 		"/Users/seph/Documents/Bitwig Studio/Controller Scripts/eImprov/eImprov_Quneo.control.js",
 		"/Users/seph/Documents/Bitwig Studio/Controller Scripts/eImprov/Quneo/Flair.js",
-		"/Users/seph/Library/Application Support/Sublime Text 2/Packages/User/JavaScript.sublime-settings",
-		"/Users/seph/Documents/Bitwig Studio/Controller Scripts/eImprov/Shared/MDI_BitwigHax.js",
-		"/Users/seph/Documents/Bitwig Studio/Controller Scripts/eImprov/12_Step/12Step_init.js",
-		"/Users/seph/Documents/Bitwig Studio/Controller Scripts/eImprov/Keys/Keys_init.js",
-		"/Users/sjaromin/Desktop/testColor.html",
-		"/Users/sjaromin/Documents/Bitwig Studio/Controller Scripts/eImprov/Quneo/QUNEO_init.js",
-		"/Users/sjaromin/Desktop/minecraft/forge/src/main/java/com/thumbz/mydimension/biomeConfig.json",
-		"/Users/sjaromin/Projects/Code/GitHubBranches/wii-u-gc-adapter2/wii-u-gc-adapter.c",
-		"/Users/sjaromin/Projects/Code/APIs/Spigot-API/README.md",
-		"/Users/sjaromin/Games/Evera/plugins/TerrainControl/worlds/CaveWorld/BiomeConfigs/LavaSandCavesBiomeConfig.ini"
+		"/Users/seph/Library/Application Support/Sublime Text 2/Packages/User/JavaScript.sublime-settings"
 	],
 	"find":
 	{
-		"height": 23.0
+		"height": 35.0
 	},
 	"find_in_files":
 	{
@@ -720,6 +746,18 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"sephreed",
+			"search_tmp",
+			"search_bar",
+			"search_box",
+			"localStorage.setItem",
+			"localStorage.getItem",
+			"ALLOW",
+			"getQue",
+			"localStorage.getItem",
+			"localStorage.setItem",
+			"localStorage.getItem",
+			"AES_CBC",
 			"\\n",
 			"\\[.*\\] ",
 			"/\\[.*\\]/g",
@@ -835,19 +873,7 @@
 			"octave",
 			"page",
 			"selectTrack",
-			"selectedTrack",
-			"remove",
-			"early",
-			"MDI_selected_track",
-			"MDI_seleced_tra",
-			"MDI_selected_tra",
-			"selected",
-			"tryRelea",
-			"attem",
-			"selectedTrack",
-			"selected",
-			"noteIn",
-			"noteInMDI_noteInMDI_noteIn"
+			"selectedTrack"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -855,6 +881,15 @@
 		"regex": true,
 		"replace_history":
 		[
+			"SephReed",
+			"search_bar",
+			"search_box",
+			"search_tmp",
+			"SAFE.set",
+			"SAFE.get",
+			"SAFE.set",
+			"SAFE.get",
+			"AES",
 			"\\n\\n",
 			"",
 			"showChoices",
@@ -918,19 +953,77 @@
 			[
 				{
 					"buffer": 0,
-					"file": "public/css/digiden.css",
-					"semi_transient": true,
+					"file": "index.html",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1304,
+						"buffer_size": 20168,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								307,
-								273
+								6954,
+								6954
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2972.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "about.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1211,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								535,
+								535
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "public/css/digiden.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1325,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								400,
+								400
 							]
 						],
 						"settings":
@@ -938,10 +1031,39 @@
 							"syntax": "Packages/CSS/CSS.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "public/js/SAFE.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1404,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								393,
+								393
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 7.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -986,7 +1108,7 @@
 	"project": "digiden.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":
